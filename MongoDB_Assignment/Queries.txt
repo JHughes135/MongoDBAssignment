@@ -1,0 +1,24 @@
+__CSV Upload__
+mongoimport -d Assignment -c Airplane_Crashes --type csv --file Airplane_Crashes_and_Fatalities_Since_1908.csv --headerline --maintainInsertionOrder
+
+__All documents__
+db.Airplane_Crashes.find().pretty()
+
+
+__Embeded Array and projection__
+db.DatesCol.find({"Crashes" : {$elemMatch : {"Operator":/Military/}}}, {"Crashes": 0}).pretty()
+
+
+__Projection__
+db.Airplane_Crashes.find({Type: {$regex: "Douglas DC"}}, {"_id": 0, "Time": 0, "Registration" : 0, "Aboard": 0, "cn/In": 0, "Fatalities": 0, "Ground": 0, "Flight #": 0, "Operator": 0}).pretty()
+
+
+__aggregation__
+db.Airplane_Crashes.count({"Fatalities": {"$gt": 0}})
+
+
+__Sorting__
+db.Airplane_Crashes.find({Fatalities:{$ne: ""}}).sort({Fatalities: -1}).pretty()
+
+__Update__
+db.Airplane_Crashes.update({Date: {$regex: /08$/}}, {$set: {Location: "DIT"}})
